@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>无标题文档</title>
+    <link href="__STATIC__/admin/css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="__STATIC__/admin/css/select.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="__STATIC__/admin/js/jquery-3.2.1.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/jquery.idTabs.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/select-ui.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/common.js"></script>
+</head>
+<body>
+<div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+        <li><a href="#">首页</a></li>
+        <li><a href="#">采集数据列表</a></li>
+    </ul>
+</div>
+<div class="formbody">
+    <form method="post">
+        <table class="tablelist">
+            <thead>
+            <tr>
+                <th>节点id</th>
+                <th>采集节点</th>
+                <th>选择栏目</th>
+                <th width="10%">操 作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {foreach name="collection" item="val"}
+            <tr>
+                <td>{$val.c_id}</td>
+                <td>{$val.collection_name}</td>
+                <td>
+                    <select name="cate_id" style="width:98%;opacity: 0.8">
+                        <option value="">选择栏目</option>
+                        {foreach name="cate" item="vo"}
+                        {eq name="vo.model_id" value="$val.model_id"}
+                        <option value="{$vo.id}">{$vo.cate_name}</option>
+                        {/eq}
+                        {/foreach}
+                    </select>
+                </td>
+                <td>
+                    <a href="javascript:void (0);" onclick="javascript:output(this,{$val.c_id})">导出</a>
+                    <a href="javascript:void(0)" onclick="warning('确定要删除吗', '{:url('collection/delete_c_data',['id'=>$val.c_id])}')">删除</a>
+                </td>
+            </tr>
+            {/foreach}
+            </tbody>
+        </table>
+    </form>
+    <div class="page">
+        {$collection->render();}
+    </div>
+</div>
+<script type="text/javascript">
+    $("#usual1 ul").idTabs();
+    $('.tablelist tbody tr:odd').addClass('odd');
+    function output(obj,c_id) {
+        var cate_id = $(obj).parents('tr').find('select').val();
+        if(cate_id==''){
+            alert('请选择要导出的栏目');
+            return false;
+        }
+        $('#loading').show();
+        $.ajax({
+            type: "GET",
+            url: "{:url('collection/output')}",
+            data: {c_id: c_id,cate_id:cate_id},
+            dataType: "json",
+            success: function (data) {
+                if (data == 1) {
+                    $('#loading_content').html("<p>导出数据成功</p>");
+                    setTimeout(function () {
+                        $('#loading').hide();
+                    },1000);
+                } else {
+                    $('#loading_content').html("<p>导出数据失败</p>");
+                    setTimeout(function () {
+                        $('#loading').hide();
+                    },1000);
+                }
+            }
+        })
+    }
+</script>
+</div>
+<div id ="loading" style="position: absolute; top: 0; left: 0; width: 100%; background: #ccc; height: 100%; opacity: 0.7; display: none;">
+    <div id="loading_content" style="margin: 0 auto; margin-top: 300px; width:100px; height: 100px;">
+        <img src="__STATIC__/admin/images/timg.gif" width="100%" height="100%"/>
+        <p style="text-align: center">导出进行中。。。</p>
+    </div>
+</div>
+</body>
+</html>

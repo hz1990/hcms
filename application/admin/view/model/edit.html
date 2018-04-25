@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>无标题文档</title>
+    <link href="__STATIC__/admin/css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="__STATIC__/admin/css/select.css" rel="stylesheet" type="text/css"/>
+    <link href="__STATIC__/admin/plus/uploadify/uploadify.css" rel="stylesheet" type="text/css"/>
+
+    <script type="text/javascript" src="__STATIC__/admin/js/jquery-3.2.1.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/jquery.idTabs.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/select-ui.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/ueditor/ueditor.all.js"></script>
+    <script type="text/javascript" charset="utf-8" src="__STATIC__/admin/ueditor/lang/zh-cn/zh-cn.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/plus/uploadify/jquery.uploadify.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function (e) {
+            $(".select").uedSelect({
+                width: 520
+            });
+        });
+    </script>
+</head>
+<body>
+
+<div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+        <li><a href="#">首页</a></li>
+        <li><a href="#">修改模型</a></li>
+    </ul>
+</div>
+
+<div class="formbody">
+    <div id="usual1" class="usual">
+        <div class="itab">
+            <ul>
+                <li><a href="#tab1" class="selected">基本参数</a></li>
+            </ul>
+        </div>
+        <form action="" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="id" value="{$data.id}"/>
+            <!--TAB1-->
+            <div id="tab1" class="tabson">
+                <ul class="forminfo">
+                    <li>
+                        <label>模型名称<b>*</b></label>
+                        <input name="model_name" type="text" class="dfinput" value="{$data.model_name}" style="width:520px;"/>
+                    </li>
+                    <li>
+                        <label>模型表名<b>*</b></label>
+                        <input name="table_name" type="text" class="dfinput" value="{$data.table_name}" style="width:520px;"/>
+                    </li>
+                    <li>
+                        <label>栏目状态<b>*</b></label>
+                        <cite>
+                            <input name="status" type="radio" value="1" {eq name="data.status" value="1"}checked{/eq}/>显示
+                            <input name="status" type="radio" value="0" {eq name="data.status" value="0"}checked{/eq}/>隐藏
+                        </cite>
+                    </li>
+                    <li>
+                        <label></label>
+                        <cite>
+                            <input class="btn" type="submit" value="提交"/>
+                        </cite>
+                    </li>
+                </ul>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
+<script type="text/javascript">
+    var ue = UE.getEditor('editor');
+
+    $("#usual1 ul").idTabs();
+    $('.tablelist tbody tr:odd').addClass('odd');
+
+    //栏目类型效果
+    $("input[name='type']").click(function () {
+        if ($("input[name='type']:checked").val()==3) {
+            $('#link').show();
+        } else {
+            $('#link').hide();
+            $('#link').val('');
+        }
+    });
+</script>

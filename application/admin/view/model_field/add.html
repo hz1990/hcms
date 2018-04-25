@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>无标题文档</title>
+    <link href="__STATIC__/admin/css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="__STATIC__/admin/css/select.css" rel="stylesheet" type="text/css"/>
+    <link href="__STATIC__/admin/plus/uploadify/uploadify.css" rel="stylesheet" type="text/css"/>
+
+    <script type="text/javascript" src="__STATIC__/admin/js/jquery-3.2.1.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/jquery.idTabs.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/select-ui.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/ueditor/ueditor.all.js"></script>
+    <script type="text/javascript" charset="utf-8" src="__STATIC__/admin/ueditor/lang/zh-cn/zh-cn.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/plus/uploadify/jquery.uploadify.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function (e) {
+            $(".select").uedSelect({
+                width: 520
+            });
+        });
+    </script>
+</head>
+<body>
+
+<div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+        <li><a href="#">首页</a></li>
+        <li><a href="#">添加字段</a></li>
+    </ul>
+</div>
+
+<div class="formbody">
+    <div id="usual1" class="usual">
+        <div class="itab">
+            <ul>
+                <li><a href="#tab1" class="selected">字段参数</a></li>
+            </ul>
+        </div>
+        <form action="" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="model_id" value="{$data.id}"/>
+        <!--TAB1-->
+            <div id="tab1" class="tabson">
+                <ul class="forminfo">
+                    <li>
+                        <label>中文名称<b>*</b></label>
+                        <input name="field_cname" type="text" class="dfinput" value="" style="width:520px;"/>
+                    </li>
+                    <li>
+                        <label>英文名称<b>*</b></label>
+                        <input name="field_ename" type="text" class="dfinput" value="" style="width:520px;"/>
+                    </li>
+                    <li>
+                        <label>字段类型<b>*</b></label>
+                        <div class="vocation">
+                            <select class="select" name="field_type">
+                                <option></option>
+                                <option value="1">输入框</option>
+                                <option value="2">单 选</option>
+                                <option value="3">复 选</option>
+                                <option value="4">下拉菜单</option>
+                                <option value="5">文本域</option>
+                                <option value="6">附 件</option>
+                                <option value="7">浮点型</option>
+                                <option value="8">整 型</option>
+                                <option value="9">长文本</option>
+                            </select>
+                        </div>
+                    </li>
+                    <li>
+                        <label>可 选 值<b>*</b></label>
+                        <input name="field_value" type="text" class="dfinput" value="" style="width:520px;"/>
+                        <i>多个值之间用“,”分隔</i>
+                    </li>
+                    <li>
+                        <label></label>
+                        <cite>
+                            <input class="btn" type="submit" value="提交"/>
+                        </cite>
+                    </li>
+                </ul>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
+<script type="text/javascript">
+    $("#usual1 ul").idTabs();
+    $('.tablelist tbody tr:odd').addClass('odd');
+</script>

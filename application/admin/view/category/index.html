@@ -1,0 +1,231 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>无标题文档</title>
+    <link href="__STATIC__/admin/css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="__STATIC__/admin/css/select.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="__STATIC__/admin/js/jquery.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/jquery.idTabs.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/select-ui.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function (e) {
+            $(".select").uedSelect({
+                width: 520
+            });
+        });
+    </script>
+</head>
+<body>
+
+<div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+        <li><a href="#">首页</a></li>
+        <li><a href="#">系统设置</a></li>
+    </ul>
+</div>
+
+<div class="formbody">
+    <div id="usual1" class="usual">
+        <div class="itab">
+            <ul>
+                <li><a href="#tab1" class="selected">基本配置</a></li>
+                <li><a href="#tab2">联系方式</a></li>
+                <li><a href="#tab3">SEO配置</a></li>
+            </ul>
+        </div>
+
+        <!--TAB1-->
+        <div id="tab1" class="tabson">
+            <form action="" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="config_type" value="1"/>
+                <ul class="forminfo">
+                    {foreach name="system" item="val"}
+                    {eq name="val.config_type" value="1"}
+                    <li>
+                        <label>{$val.cname}<b>*</b></label>
+                        {switch name="val.data_type"}
+                        {case value="1"}
+                        <input name="{$val.ename}" type="text" class="dfinput" value="{$val.value}" style="width:520px;"/>
+                        {/case}
+                        {case value="2"}
+                        <cite>
+                            {volist name="val.values" id="vo"}
+                            <input name="{$val.ename}" type="radio" value="{$vo}" {eq name="vo" value="$val.value"}checked{/eq}/> {$vo}
+                            {/volist}
+                        </cite>
+                        {/case}
+                        {case value="3"}
+                        {volist name="val.values" id="vo"}
+                        <input name="{$val.ename}[]" type="checkbox" value="{$vo}" {in name="vo" value="$val.value" }checked{/in}/>{$vo}
+                        {/volist}
+                        {/case}
+                        {case value="4"}
+                        <div class="vocation">
+                            <select name="{$val.ename}" class="select">
+                                <option value=""></option>
+                                {volist name="val.values" id="vo"}
+                                <option value="{$vo}" {eq name="vo" value="$val.value" }selected{/eq}>{$vo}</option>
+                                {/volist}
+                            </select>
+                        </div>
+                        {/case}
+                        {case value="5"}
+                        <textarea rows="" name="{$val.ename}" class="textinput" cols="">{$val.value}</textarea>
+                        {/case}
+                        {case value="6"}
+                        <input name="{$val.ename}" type="file" value="{$val.value}" style="width:520px;"/>
+                        <input name="{$val.ename}" type="hidden" value="{$val.value}" style="width:520px;" />
+                        {/case}
+                        {/switch}
+                    </li>
+                    {/eq}
+                    {/foreach}
+                </ul>
+                <div><input class="btn" type="submit" value="提交"/></div>
+            </form>
+        </div>
+
+        <!--TAB2-->
+        <div id="tab2" class="tabson">
+            <form action="" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="config_type" value="2"/>
+                <ul class="forminfo">
+                    {foreach name="system" item="val"}
+                    {eq name="val.config_type" value="2"}
+                    <li>
+                        <label>{$val.cname}<b>*</b></label>
+                        {switch name="val.data_type"}
+                        {case value="1"}
+                        <input name="{$val.ename}" type="text" class="dfinput" value="{$val.value}"
+                               style="width:520px;"/>
+                        {/case}
+                        {case value="2"}
+                        <cite>
+                            {volist name="val.values" id="vo"}
+                            <input name="{$val.ename}" type="radio" value="{$vo}" {eq name="vo" value="$val.value" }checked{/eq}/> {$vo}
+                            {/volist}
+                        </cite>
+                        {/case}
+                        {case value="3"}
+                        {volist name="val.values" id="vo"}
+                        <input name="{$val.ename}[]" type="checkbox" value="{$vo}" {in name="vo" value="$val.value" }checked{/in}/>{$vo}
+                        {/volist}
+                        {/case}
+                        {case value="4"}
+                        <div class="vocation">
+                            <select name="{$val.ename}" class="select">
+                                <option value=""></option>
+                                {volist name="val.values" id="vo"}
+                                <option value="{$vo}" {eq name="vo" value="$val.value" }selected{/eq}>{$vo}</option>
+                                {/volist}
+                            </select>
+                        </div>
+                        {/case}
+                        {case value="5"}
+                        <textarea rows="" name="{$val.ename}" class="textinput" cols="">{$val.value}</textarea>
+                        {/case}
+                        {case value="6"}
+                        <input name="{$val.ename}" type="file" value="{$val.value}" style="width:520px;"/>
+                        <input name="{$val.ename}" type="hidden" value="{$val.value}" style="width:520px;" />
+                        {/case}
+                        {/switch}
+                    </li>
+                    {/eq}
+                    {/foreach}
+                </ul>
+                <div><input class="btn" type="submit" value="提交"/></div>
+            </form>
+        </div>
+
+        <!--TAB3-->
+        <div id="tab3" class="tabson">
+            <form action="" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="config_type" value="3"/>
+                <ul class="forminfo">
+                    {foreach name="system" item="val"}
+                    {eq name="val.config_type" value="3"}
+                    <li>
+                        <label>{$val.cname}<b>*</b></label>
+                        {switch name="val.data_type"}
+                        {case value="1"}
+                        <input name="{$val.ename}" type="text" class="dfinput" value="{$val.value}"
+                               style="width:520px;"/>
+                        {/case}
+                        {case value="2"}
+                        <cite>
+                            {volist name="val.values" id="vo"}
+                            <input name="{$val.ename}" type="radio" value="{$vo}" {eq name="vo" value="$val.value"}checked{/eq}/> {$vo}
+                            {/volist}
+                        </cite>
+                        {/case}
+                        {case value="3"}
+                        {volist name="val.values" id="vo"}
+                        <input name="{$val.ename}[]" type="checkbox" value="{$vo}" {in name="vo" value="$val.value" }checked{/in}/>{$vo}
+                        {/volist}
+                        {/case}
+                        {case value="4"}
+                        <div class="vocation">
+                            <select name="{$val.ename}" class="select">
+                                <option value=""></option>
+                                {volist name="val.values" id="vo"}
+                                <option value="{$vo}" {eq name="vo" value="$val.value" }selected{/eq}>{$vo}</option>
+                                {/volist}
+                            </select>
+                        </div>
+                        {/case}
+                        {case value="5"}
+                        <textarea rows="" name="{$val.ename}" class="textinput" cols="">{$val.value}</textarea>
+                        {/case}
+                        {case value="6"}
+                        <input name="{$val.ename}" type="file" value="{$val.value}" style="width:520px;"/>
+                        <input name="{$val.ename}" type="hidden" value="{$val.value}" style="width:520px;" />
+                        {/case}
+                        {/switch}
+                    </li>
+                    {/eq}
+                    {/foreach}
+                </ul>
+                <div><input class="btn" type="submit" value="提交"/></div>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $("#usual1 ul").idTabs();
+        $('.tablelist tbody tr:odd').addClass('odd');
+    </script>
+</div>
+
+</body>
+</html>
+
+<script>
+    function del(obj, id) {
+        //删除
+        if (confirm('确认删除')) {
+            //确认删除
+            $.ajax({
+
+                type: "GET",
+
+                url: "{:url('System/delete')}",
+
+                data: {id: id},
+
+                dataType: "json",
+
+                success: function (data) {
+                    if (data == 1) {
+                        $(obj).parents("tr").remove();
+                        alert('删除成功');
+                    } else {
+                        alert('删除失败');
+                    }
+                }
+            })
+        }
+    }
+</script>

@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>无标题文档</title>
+    <link href="__STATIC__/admin/css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="__STATIC__/admin/css/select.css" rel="stylesheet" type="text/css"/>
+    <link href="__STATIC__/admin/plus/uploadify/uploadify.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="__STATIC__/admin/js/jquery-3.2.1.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/jquery.idTabs.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/select-ui.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/ueditor/ueditor.all.js"></script>
+    <script type="text/javascript" charset="utf-8" src="__STATIC__/admin/ueditor/lang/zh-cn/zh-cn.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/plus/uploadify/jquery.uploadify.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(e) {
+            $(".select").uedSelect({
+                width : 345,
+            })
+        });
+        $(function(){
+            $("#uploadify").uploadify({
+                swf:'__STATIC__/admin/plus/uploadify/uploadify.swf',  //引入uploadify.swf
+                uploader:"{:url('advert/upimg')}",//请求路径
+                fileTypeDesc:'Image Files',    //可选择文件类型说明
+                buttonText:'图片上传',//按钮上的文字
+                buttonClass:'btn',//按钮样式
+                progressData:'speed',
+                fileObjName:'img',
+                onUploadSuccess:function (file,data,res) {
+                    if($('#litpic')){
+                        $('#litpic').remove();
+                        $('#uploadify').after("<span id='litpic'><img src='"+data+"' height='100'/></span>");
+                        $('#ad_img').val(data);
+                    }else{
+                        $('#uploadify').after("<span id='litpic'><img src='"+data+"' height='100'/></span>");
+                        $('#ad_img').val(data);
+                    }
+                    $('#uploadify-queue').remove();
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+        <li><a href="#">首页</a></li>
+        <li><a href="#">添加广告位</a></li>
+    </ul>
+</div>
+<div class="formbody">
+    <div class="formtitle"><span>添加广告位</span></div>
+    <form action="" method="post" enctype="multipart/form-data">
+        <ul class="forminfo">
+            <li>
+                <label>广告位置</label>
+                <div class="vocation">
+                    <select name="position_id" class="select">
+                        <option value="">请选择广告位置</option>
+                        {foreach name="position" item="val"}
+                        <option value="{$val.id}">{$val.name}</option>
+                        {/foreach}
+                    </select>
+                </div>
+                <i>*请选择广告类型</i>
+            </li>
+            <li>
+                <label>广告类型</label>
+                <div class="vocation">
+                    <select name="type" class="select" onchange="javascript:change_type(this);">
+                        <option value="">请选择广告类型</option>
+                        <option value="1">图片广告</option>
+                        <option value="2">轮播广告</option>
+                    </select>
+                </div>
+                <i>*请选择广告类型</i>
+            </li>
+            <li>
+                <label>广告标题</label>
+                <input name="title" type="text" class="dfinput" value="" required style="width:520px;"/>
+            </li>
+            <li>
+                <label>开启状态</label>
+                <cite>
+                    <input name="status" type="radio" value="1" checked/>开启
+                    <input name="status" type="radio" value="0" />关闭
+                </cite>
+            </li>
+            <div id="img" style="display: none;">
+                <li>
+                    <label>广告图片<b></b></label>
+                    <cite>
+                        <div id="uploadify"></div>
+                        <input type="hidden" id="ad_img" name="img_src" value=""/>
+                    </cite>
+                </li>
+                <li>
+                    <label>广告链接</label>
+                    <input name="link" type="text" class="dfinput" value="http://" style="width:520px;"/>
+                </li>
+            </div>
+            <div id="flash" style="display: none;">
+                <li>
+                    <label><a href="javascript:void(0) ;" onclick="add_list(this);">[+]</a></label>
+                    <span>图片：</span><input name="flash_src[]" type="file" value="" style="width:200px;"/>
+                    <span>链接：</span><input name="flash_link[]" type="text" placeholder="链接地址" class="dfinput" value="http://" style="width:300px;"/>
+                </li>
+            </div>
+            <li>
+                <label>&nbsp;</label>
+                <input type="submit" class="btn" value="确认保存"/>
+            </li>
+        </ul>
+    </form>
+</div>
+</body>
+</html>
+<script>
+    function change_type(obj) {
+        var type = $(obj).val();
+        if(type ==1){
+            $('#flash').hide();
+            $('#img').show();
+        }else{
+            $('#img').hide();
+            $('#flash').show();
+        }
+    }
+    function add_list(obj) {
+        var str='<li>';
+            str+='<label><a href="javascript:void(0) ;" onclick="add_list(this);" style="margin-right:1em;">[+]</a><a href="javascript:void(0) ;" onclick="del_list(this);">[-]</a></label>';
+            str+='<span>图片：</span><input name="flash_src[]" type="file" value="" style="width:200px;"/>';
+            str+='<span>链接：</span><input name="flash_link[]" type="text" placeholder="链接地址" class="dfinput" value="http://" style="width:300px;"/>';
+            str+='</li>';
+            $(obj).parents('li').after(str);
+    }
+    function del_list(obj) {
+        $(obj).parents('li').remove();
+    }
+</script>
+

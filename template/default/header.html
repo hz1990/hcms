@@ -1,0 +1,110 @@
+<header class="top header-v1 desktops-section default-top">
+    <div class="top-main">
+        <div class="page-width clearfix">
+            <div class="logo" skinobjectzone="HtmlLogo_399">
+                <a href="{:url('index/index/index')}">
+                    <img src="{$system.logo}" alt="" height="80px" width="80px"/>
+                </a>
+            </div>
+            <!--nav begin-->
+            <nav class="nav">
+                <div class="main-nav clearfix" skinobjectzone="menu_461">
+                    <ul class="sf-menu">
+                        <li><a class="first-level" href="{:url('index/index')}" ><strong>网站首页</strong></a><i></i></li>
+                        {foreach name="cate" item="val"}
+                        <li {eq name="val.id" value="$leftCate.id"}class="current"{/eq}><a class="first-level" href="{:url('cate/index',['id'=>$val.id])}" ><strong>{$val.cate_name}</strong></a>
+                            {present name="val.son"}
+                            <ul class="">
+                                {volist name="val.son" id="vo"}
+                                <li class=""><a href="{:url('cate/index',['id'=>$vo.id])}" ><strong>{$vo.cate_name}</strong></a></i></li>
+                                {/volist}
+                            </ul>
+                            {/present}
+                        </li>
+                        {/foreach}
+                    </ul>
+                </div>
+            </nav>
+            <!--nav end-->
+            <div class="language float-right" skinobjectzone="HtmlLanguage_1268">
+                <ul class="sf-menu">
+                    <li><a href="javascript:;" class="first-level"><span><em>中文简体</em></span></a>
+                        <ul>
+                            <li><a href="/en/"><span><em>English</em></span></a></li>
+                            <li><a href="/"><span><em>中文简体</em></span></a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="clear"></div>
+</header>
+<div class="touch-top mobile-section clearfix">
+    <div class="touch-top-wrapper clearfix">
+        <div class="touch-logo" skinobjectzone="HtmlLogo_2643">
+            <a class="" href="{:url('index/index')}"><img src="{$system.logo}" alt=""/></a>
+        </div>
+        <div class="touch-navigation">
+            <div class="touch-toggle">
+                <ul>
+                    <li class="touch-toggle-item-first"><a href="javascript:;" class="drawer-language" data-drawer="drawer-section-language"><i class="touch-icon-language"></i><span>语言</span></a></li>
+                    <li class="touch-toggle-item-last"><a href="javascript:;" class="drawer-menu" data-drawer="drawer-section-menu"><i class="touch-icon-menu"></i><span>导航</span></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="touch-toggle-content touch-top-home">
+        <div class="drawer-section drawer-section-language">
+            <ul class="touch-language clearfix" skinobjectzone="HtmlLanguage_2924">
+                <li><a href="/en/">English</a></li>
+                <li><a href="/">中文简体</a></li>
+            </ul>
+        </div>
+        <div class="drawer-section drawer-section-menu">
+            <div class="touch-menu" skinobjectzone="menu_3142">
+                <ul>
+                    <li><a href="{:url('index/index')}"><span>网站首页</span></a></li>
+                    {foreach name="cate" item="val"}
+                    <li><a href="{present name="val.son"}javascript:;{else/}{:url('cate/index',['id'=>$val.id])}{/present}"><span>{$val.cate_name}</span><i class="touch-arrow-down"></i></a>
+                        {present name="val.son"}
+                        <ul>
+                            {volist name="val.son" id="vo"}
+                            <li><a href="{:url('cate/index',['id'=>$vo.id])}"><span>{$vo.cate_name}</span></a></li>
+                            {/volist}
+                        </ul>
+                        {/present}
+                    {/foreach}
+                </ul>
+            </div>
+        </div>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $(".touch-toggle a").click(function (event) {
+                    var className = $(this).attr("data-drawer");
+                    if ($("." + className).css('display') == 'none') {
+                        $("." + className).slideDown().siblings(".drawer-section").slideUp();
+                    } else {
+                        $(".drawer-section").slideUp();
+                    }
+                    event.stopPropagation();
+                });
+                /*$(document).click(function(){
+                 $(".drawer-section").slideUp();
+                 })*/
+                $('.touch-menu a').click(function () {
+                    if ($(this).next().is('ul')) {
+                        if ($(this).next('ul').css('display') == 'none') {
+                            $(this).next('ul').slideDown();
+                            $(this).find('i').attr("class", "touch-arrow-up");
+                        } else {
+                            $(this).next('ul').slideUp();
+                            $(this).next('ul').find('ul').slideUp();
+                            $(this).find('i').attr("class", "touch-arrow-down");
+                        }
+                    }
+                });
+            });
+        </script>
+    </div>
+</div>

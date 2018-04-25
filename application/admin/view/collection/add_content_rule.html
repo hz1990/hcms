@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link href="__STATIC__/admin/css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="__STATIC__/admin/css/select.css" rel="stylesheet" type="text/css"/>
+    <link href="__STATIC__/admin/plus/uploadify/uploadify.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="__STATIC__/admin/js/jquery-3.2.1.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/jquery.idTabs.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/select-ui.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/ueditor/ueditor.all.js"></script>
+    <script type="text/javascript" charset="utf-8" src="__STATIC__/admin/ueditor/lang/zh-cn/zh-cn.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/plus/uploadify/jquery.uploadify.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function (e) {
+            $(".select").uedSelect({
+                width: 520
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+        <li><a href="#">首页</a></li>
+        <li><a href="#">添加采集规则</a></li>
+    </ul>
+</div>
+<div class="formbody">
+    <div id="usual1" class="usual">
+        <div class="itab">
+            <ul>
+                <li><a href="#tab1" class="selected">内容页参数</a></li>
+            </ul>
+        </div>
+        <form action="" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="id" value="{$id}"/>
+            <div id="tab1" class="tabson">
+                <ul class="forminfo">
+                    <li>
+                        <label>采集范围<b>*</b></label>
+                        <input name="range" type="text" placeholder="采集范围" class="dfinput" value="" style="width:520px;"/>
+                    </li>
+                    <li>
+                        <label>标题规则<b>*</b></label>
+                        <input name="title[]" type="text" placeholder="采集规则" class="dfinput" value="" style="width:520px;"/>
+                        <input name="title[]" type="text" placeholder="采集属性" class="dfinput" value="" style="width:200px;"/>
+                        <input name="title[]" type="text" placeholder="过滤规则" class="dfinput" value="" style="width:200px;"/>
+                    </li>
+                    <li>
+                        <label>关键词规则<b>*</b></label>
+                        <input name="keywords[]" type="text" placeholder="采集规则" class="dfinput" value="" style="width:520px;"/>
+                        <input name="keywords[]" type="text" placeholder="采集属性" class="dfinput" value="" style="width:200px;"/>
+                        <input name="keywords[]" type="text" placeholder="过滤规则" class="dfinput" value="" style="width:200px;"/>
+                    </li>
+                    <li>
+                        <label>描述规则<b>*</b></label>
+                        <input name="description[]" type="text" placeholder="采集规则" class="dfinput" value="" style="width:520px;"/>
+                        <input name="description[]" type="text" placeholder="采集属性" class="dfinput" value="" style="width:200px;"/>
+                        <input name="description[]" type="text" placeholder="过滤规则" class="dfinput" value="" style="width:200px;"/>
+                    </li>
+                    <li>
+                        <label>作者规则<b>*</b></label>
+                        <input name="writer[]" type="text" placeholder="采集规则" class="dfinput" value="" style="width:520px;"/>
+                        <input name="writer[]" type="text" placeholder="采集属性" class="dfinput" value="" style="width:200px;"/>
+                        <input name="writer[]" type="text" placeholder="过滤规则" class="dfinput" value="" style="width:200px;"/>
+                    </li>
+                    <li>
+                        <label>来源规则<b>*</b></label>
+                        <input name="source[]" type="text" placeholder="采集规则" class="dfinput" value="" style="width:520px;"/>
+                        <input name="source[]" type="text" placeholder="采集属性" class="dfinput" value="" style="width:200px;"/>
+                        <input name="source[]" type="text" placeholder="过滤规则" class="dfinput" value="" style="width:200px;"/>
+                    </li>
+                    <li>
+                        <label>内容规则<b>*</b></label>
+                        <input name="content[]" type="text" placeholder="采集规则" class="dfinput" value="" style="width:520px;"/>
+                        <input name="content[]" type="text" placeholder="采集属性" class="dfinput" value="" style="width:200px;"/>
+                        <input name="content[]" type="text" placeholder="过滤规则" class="dfinput" value="" style="width:200px;"/>
+                    </li>
+                    {present name="fields"}
+                        {foreach name="fields" item="val"}
+                            <li>
+                                <label>{$val.field_cname}规则</label>
+                                <input name="{$val.field_ename}[]" type="text" placeholder="采集规则" class="dfinput" value="" style="width:520px;"/>
+                                <input name="{$val.field_ename}[]" type="text" placeholder="采集属性" class="dfinput" value="" style="width:200px;"/>
+                                <input name="{$val.field_ename}[]" type="text" placeholder="过滤规则" class="dfinput" value="" style="width:200px;"/>
+                            </li>
+                        {/foreach}
+                    {/present}
+                    <li>
+                        <label></label>
+                        <cite>
+                            <input class="btn" type="submit" value="提交"/>
+                        </cite>
+                    </li>
+                </ul>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+    $("#usual1 ul").idTabs();
+    $('.tablelist tbody tr:odd').addClass('odd');
+</script>

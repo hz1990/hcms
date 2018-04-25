@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>无标题文档</title>
+    <link href="__STATIC__/admin/css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="__STATIC__/admin/css/select.css" rel="stylesheet" type="text/css"/>
+    <link href="__STATIC__/admin/plus/uploadify/uploadify.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="__STATIC__/admin/js/jquery-3.2.1.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/jquery.idTabs.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/select-ui.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/ueditor/ueditor.all.js"></script>
+    <script type="text/javascript" charset="utf-8" src="__STATIC__/admin/ueditor/lang/zh-cn/zh-cn.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/plus/uploadify/jquery.uploadify.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function (e) {
+            $(".select").uedSelect({
+                width: 520
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+        <li><a href="#">首页</a></li>
+        <li><a href="#">添加管理员</a></li>
+    </ul>
+</div>
+
+<div class="formbody">
+    <div id="usual1" class="usual">
+        <div class="itab">
+            <ul>
+                <li><a href="#tab1" class="selected">基本参数</a></li>
+            </ul>
+        </div>
+        <form action="" method="post" enctype="multipart/form-data" onsubmit="return checkForm()">
+            <input type="hidden" name="id" value="{$data.id}"/>
+            <!--TAB1-->
+            <div id="tab1" class="tabson">
+                <ul class="forminfo">
+                    <li>
+                        <label>用户名<b>*</b></label>
+                        <input name="username" type="text" class="dfinput" value="{$data.username}" style="width:520px;" required pattern="^[a-zA-Z0-9_]{6,20}$" />
+                        <i>请输入6-20位由英文字幕、数字、下划线构成的用户名</i>
+                    </li>
+                    <li>
+                        <label>密 码<b>*</b></label>
+                        <input name="password" type="password" class="dfinput" value="" style="width:520px;"  pattern="^[\S]{6,20}$" />
+                        <i>如无需修改密码请勿填写此项</i>
+                    </li>
+                    <li>
+                        <label>确认密码<b>*</b></label>
+                        <input name="re_password" type="password" class="dfinput" value="" style="width:520px;"  pattern="^[\S]{6,20}$"/>
+                        <i>如无需修改密码请勿填写此项</i>
+                    </li>
+                    <li>
+                        <label>用户组<b>*</b></label>
+                        <div class="vocation">
+                            <select name="group_id" class="select" required>
+                                <option value="">请 选 择</option>
+                                {foreach name="group" item="val"}
+                                <option value="{$val.id}" {eq name="data.group_id" value="$val.id"}selected{/eq}>{$val.title}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                        <i>请选择</i>
+                    </li>
+                    <li>
+                        <label>状 态<b>*</b></label>
+                        <cite>
+                            <input name="status" type="radio" value="1" {eq name="data.status" value="1"}checked{/eq}/>启用
+                            <input name="status" type="radio" value="0" {eq name="data.status" value="0"}checked{/eq}/>禁用
+                        </cite>
+                    </li>
+                    <li>
+                        <label></label>
+                        <cite>
+                            <input class="btn" type="submit" value="提交"/>
+                        </cite>
+                    </li>
+                </ul>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+    $("#usual1 ul").idTabs();
+    $('.tablelist tbody tr:odd').addClass('odd');
+    function checkForm() {
+        var password = $('input[name="password"]').val();
+        var re_password = $('input[name="re_password"]').val();
+        if(password == re_password){
+            return true;
+        }
+        return false;
+    }
+</script>

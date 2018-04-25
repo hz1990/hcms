@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>无标题文档</title>
+    <link href="__STATIC__/admin/css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="__STATIC__/admin/css/select.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="__STATIC__/admin/js/jquery-3.2.1.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/jquery.idTabs.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/select-ui.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/common.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function (e) {
+            $(".select1").uedSelect({
+                width: 345
+            });
+            $(".select2").uedSelect({
+                width: 167
+            });
+            $(".select3").uedSelect({
+                width: 100
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+        <li><a href="#">首页</a></li>
+        <li><a href="#">模型列表</a></li>
+    </ul>
+</div>
+<div class="formbody">
+    <form method="post">
+        <div class="tools">
+            <ul class="toolbar">
+                <a href="{:url('model/add')}">
+                    <li><span><img src="__STATIC__/admin/images/t01.png"></span>添加</li>
+                </a>
+            </ul>
+        </div>
+        <table class="tablelist">
+            <thead>
+            <tr>
+                <th width="100px;">ID</th>
+                <th>模型名称</th>
+                <th>模型表名</th>
+                <th>状态</th>
+                <th width="10%">操 作</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {foreach name="model" item="val"}
+            <tr>
+                <td>{$val.id}</td>
+                <td>{$val.model_name}</td>
+                <td>{$val.table_name}</td>
+                <td>
+                    <a class="{eq name="val.status" value="1"}a_show{else/}a_hide{/eq}" href="javascript:void(0);" onclick="javascript:turn({$val.id},this);">
+                    {switch name="val.status"}
+                    {case value="1" break="1"}显示{/case}
+                    {case value="0" break="1"}隐藏{/case}
+                    {/switch}
+                    </a>
+                </td>
+                <td>
+                    <a href="{:url('model/edit',['id'=>$val.id])}">编辑</a>
+                    <a href="{:url('ModelField/lst',['model_id'=>$val.id])}">模型字段</a>
+                    <a href="javascript:void(0)" onclick="warning('确定要删除吗', '{:url('model/delete',['id'=>$val.id])}')">删除</a>
+                </td>
+            </tr>
+            {/foreach}
+            </tbody>
+        </table>
+    </form>
+    <div class="page">
+        {$model->render();}
+    </div>
+</div>
+<script type="text/javascript">
+    $("#usual1 ul").idTabs();
+    $('.tablelist tbody tr:odd').addClass('odd');
+</script>
+</div>
+</body>
+</html>
+
+<script>
+    /*切换状态*/
+    function turn(id, obj) {
+        $.ajax({
+            type: "GET",
+            url: "{:url('model/turn')}",
+            data: {id: id},
+            dataType: "json",
+            success: function (data) {
+                if (data == 0) {
+                    $(obj).html('隐藏');
+                    $(obj).attr('class', 'a_hide');
+                } else {
+                    $(obj).html('显示');
+                    $(obj).attr('class', 'a_show');
+                }
+            }
+        })
+    }
+
+</script>

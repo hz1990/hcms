@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>无标题文档</title>
+    <link href="__STATIC__/admin/css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="__STATIC__/admin/css/select.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="__STATIC__/admin/js/jquery-3.2.1.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/jquery.idTabs.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/select-ui.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/common.js"></script>
+    <script src="__STATIC__/admin/plus/layer/layer.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function (e) {
+            $(".select1").uedSelect({
+                width: 345
+            });
+            $(".select2").uedSelect({
+                width: 167
+            });
+            $(".select3").uedSelect({
+                width: 100
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+        <li><a href="#">首页</a></li>
+        <li><a href="#">字段列表</a></li>
+    </ul>
+</div>
+<div class="formbody">
+    <form method="post">
+        <div class="tools">
+            <ul class="toolbar">
+                <a href="{:url('ModelField/add',['model_id'=>$model.id])}">
+                    <li><span><img src="__STATIC__/admin/images/t01.png"></span>添加字段</li>
+                </a>
+            </ul>
+        </div>
+        <table class="tablelist">
+            <thead>
+            <tr>
+                <th width="100px;">ID</th>
+                <th>所属模型</th>
+                <th>中文名称</th>
+                <th>英文名称</th>
+                <th>字段类型</th>
+                <th>可 选 值</th>
+                <th width="10%">操 作</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {foreach name="model_field" item="val"}
+            <tr>
+                <td>{$val.id}</td>
+                <td>{$val.model_name}</td>
+                <td>{$val.field_cname}</td>
+                <td>{$val.field_ename}</td>
+                <td>
+                    {switch name="val.field_type"}
+                        {case value="1" break="1"}输入框{/case}
+                        {case value="2" break="1"}单 选{/case}
+                        {case value="3" break="1"}复 选{/case}
+                        {case value="4" break="1"}下拉菜单{/case}
+                        {case value="5" break="1"}文本域{/case}
+                        {case value="6" break="1"}附 件{/case}
+                        {case value="7" break="1"}浮点型{/case}
+                        {case value="8" break="1"}整 型{/case}
+                        {case value="9" break="1"}长文本{/case}
+                    {/switch}
+                </td>
+                <td>{$val.field_value}</td>
+                <td>
+                    <a href="{:url('ModelField/edit',['id'=>$val.id])}">编辑</a>
+                    <a href="javascript:void(0)" onclick="javascript:del(this,{$val.id})">删除</a>
+                </td>
+            </tr>
+            {/foreach}
+            </tbody>
+        </table>
+    </form>
+    <div class="page">
+        {$model_field->render();}
+    </div>
+</div>
+<script type="text/javascript">
+    $("#usual1 ul").idTabs();
+    $('.tablelist tbody tr:odd').addClass('odd');
+
+    function del(obj,id) {
+        //删除
+        layer.confirm('确认删除？', {
+            btn: ['删除','取消'] //按钮
+        }, function(){
+            $.ajax({
+                type: "GET",
+                url: "{:url('ModelField/delete')}",
+                data: {id: id},
+                dataType: "json",
+                success: function (data) {
+                    if (data == 1) {
+                        $(obj).parents("tr").remove();
+                        layer.msg('删除成功',{icon:1});
+                    } else {
+                        layer.msg('删除失败',{icon:2});
+                    }
+                }
+            });
+        }, function(index){
+            layer.close(index);
+        });
+    }
+</script>
+</div>
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>无标题文档</title>
+    <link href="__STATIC__/admin/css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="__STATIC__/admin/css/select.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="__STATIC__/admin/js/jquery-3.2.1.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/jquery.idTabs.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/select-ui.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/common.js"></script>
+    <script src="__STATIC__/admin/plus/layer/layer.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(e) {
+            $(".select1").uedSelect({
+                width : 345
+            });
+            $(".select2").uedSelect({
+                width : 167
+            });
+            $(".select3").uedSelect({
+                width : 100
+            });
+        });
+    </script>
+</head>
+<body>
+
+<div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+        <li><a href="#">首页</a></li>
+        <li><a href="#">系统设置</a></li>
+    </ul>
+</div>
+    <form method="post" class="formbody">
+        <div class="tools">
+            <ul class="toolbar">
+                <a href="{:url('Category/add')}"><li><span><img src="__STATIC__/admin/images/t01.png"></span>添加</li></a>
+                <a href="javascript:sort()"><li><span><img src="__STATIC__/admin/images/sort.png"></span>排序</li></a>
+                <a href="javascript:del_select()"><li><span><img src="__STATIC__/admin/images/delete.png"></span>批量删除</li></a>
+            </ul>
+        </div>
+        <table class="tablelist">
+            <thead>
+            <tr>
+                <th></th>
+                <th><input type="checkbox" class="select_all"/>全选</th>
+                <th width="100px;">ID</th>
+                <th>栏目名称</th>
+                <th>上级栏目</th>
+                <th>缩略图</th>
+                <th>状 态</th>
+                <th>类 型</th>
+                <th>序 号</th>
+                <th>操 作</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {foreach name="category" item="val"}
+            <tr id="{$val.id}" pid="{$val.parent_id}" {neq name="val.parent_id" value="0"}class="hide" {/neq}>
+                <td><span class="open">+</span></td>
+                <td><input type="checkbox" class="checkbox" name="del[]" value="{$val.id}"/></td>
+                <td>{$val.id}</td>
+            <td><?php echo str_repeat("——",$val['level']-1);?><a href="{:url('Archives/lst',['cate_id'=>$val['id']])}">{$val.cate_name}</a></td>
+                <td>{$val.parent_id}</td>
+                <td>{notempty name="val.img"}<img src="{$val.img}" height="20"/>{/notempty}</td>
+                <td><a class="{eq name="val.status" value="1"}a_show{else/}a_hide{/eq}" href="javascript:void(0);" onclick="javascript:turn({$val.id},this);">
+                    {switch name="val.status"}
+                    {case value="1" break="1"}显示{/case}
+                    {case value="0" break="1"}隐藏{/case}
+                    {/switch}</a>
+                </td>
+                <td>
+                    {switch name="val.type"}
+                    {case value="1" break="1"}列表栏目{/case}
+                    {case value="2" break="1"}频道封面{/case}
+                    {case value="3" break="1"}外部链接{/case}
+                    {/switch}
+                </td>
+                <td><input class="sort" name="sort[{$val.id}]" value="{$val.sort}" style="width: 50px;"/></td>
+                <td>
+                    <a href="{:url('category/add',['id'=>$val.id])}">添加子类</a>
+                    <a href="{:url('category/edit',['id'=>$val.id])}">编辑</a>
+                    <a href="javascript:void(0)" onclick="warning('确定要删除栏目及文档吗', '{:url('category/delete',['id'=>$val.id])}')">删除</a>
+                </td>
+            </tr>
+            {/foreach}
+            </tbody>
+        </table>
+    </form>
+
+    <script type="text/javascript">
+        $("#usual1 ul").idTabs();
+        $('.tablelist tbody tr:odd').addClass('odd');
+    </script>
+</div>
+</body>
+</html>
+
+<script>
+    /*切换状态*/
+    function turn(id,obj) {
+        $.ajax({
+            type: "GET",
+            url: "{:url('category/turn')}",
+            data: {id: id},
+            dataType: "json",
+            success: function (data) {
+                if(data==0){
+                    $(obj).html('隐藏');
+                    $(obj).attr('class','a_hide');
+                }else{
+                    $(obj).html('显示');
+                    $(obj).attr('class','a_show');
+                }
+            }
+        })
+    }
+
+    /*排序*/
+    function sort() {
+        var url="{:url('category/sort')}";
+        $('form').attr('action',url);
+        $('form').submit();
+    }
+
+    /*批量删除*/
+    function del_select() {
+        layer.confirm('确认删除栏目及文档？', {
+            btn: ['删除','取消'] //按钮
+        }, function(){
+            var url="{:url('category/del_select')}";
+            $('form').attr('action',url);
+            $('form').submit();
+        }, function(index){
+            layer.close(index);
+        });
+    }
+
+    /*全选反选*/
+    $('.select_all').click(function () {
+        if($(this).is(':checked')){
+            $('.checkbox').attr('checked','true');
+        }else{
+            $('.checkbox').removeAttr('checked');
+        }
+    });
+    
+    //列表展开隐藏
+    $('.open').click(function () {
+        var pid = $(this).parents('tr').attr('id');
+        if($(this).text()=='+'){
+            $(this).text('-');
+            $(this).css('padding','0 6px');
+            $("tr[pid="+pid+"]").show();
+        }else{
+            $(this).text('+');
+            $(this).css('padding','0 4px');
+            //$("tr[pid="+pid+"]").hide();
+            hide_son_cate(pid);
+        }
+    });
+
+    //收缩多级栏目
+    function hide_son_cate(pid) {
+        $('tr[pid='+pid+']').each(function () {
+            $(this).find('.open').text('+');
+            $(this).find('.open').css('padding','0 4px');
+            $(this).hide();
+            var spid=$(this).attr('id');
+            hide_son_cate(spid);
+        })
+    }
+
+</script>

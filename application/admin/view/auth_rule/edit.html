@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link href="__STATIC__/admin/css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="__STATIC__/admin/css/select.css" rel="stylesheet" type="text/css"/>
+    <link href="__STATIC__/admin/plus/uploadify/uploadify.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="__STATIC__/admin/js/jquery-3.2.1.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/jquery.idTabs.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/select-ui.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/ueditor/ueditor.all.js"></script>
+    <script type="text/javascript" charset="utf-8" src="__STATIC__/admin/ueditor/lang/zh-cn/zh-cn.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/plus/uploadify/jquery.uploadify.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function (e) {
+            $(".select").uedSelect({
+                width: 520
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+        <li><a href="#">首页</a></li>
+        <li><a href="#">添加权限</a></li>
+    </ul>
+</div>
+
+<div class="formbody">
+    <div id="usual1" class="usual">
+        <div class="itab">
+            <ul>
+                <li><a href="#tab1" class="selected">基本参数</a></li>
+            </ul>
+        </div>
+        <form action="" method="post" enctype="multipart/form-data" >
+            <input type="hidden" name="id" value="{$data.id}"/>
+            <!--TAB1-->
+            <div id="tab1" class="tabson">
+                <ul class="forminfo">
+                    <li>
+                        <label>上级规则<b>*</b></label>
+                        <div class="vocation">
+                            <select name="pid" class="select" required>
+                                <option value="">请 选 择</option>
+                                <option value="0" {eq name="data.pid" value="0"}selected{/eq}>顶级规则</option>
+                                {foreach name="rule" item="val"}
+                                <option value="{$val.id}" {eq name="data.pid" value="$val.id"}selected{/eq}><?php echo str_repeat("——",$val['level']-1);?>{$val.name}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                        <i>请选择</i>
+                    </li>
+                    <li>
+                        <label>规则类型<b>*</b></label>
+                        <div class="vocation">
+                            <select name="type" class="select" required>
+                                <option value="1" {eq name="data.type" value="1"}selected{/eq}>**规则</option>
+                                <option value="2" {eq name="data.type" value="2"}selected{/eq}>**规则</option>
+                            </select>
+                        </div>
+                    </li>
+                    <li>
+                        <label>规则名称<b>*</b></label>
+                        <input name="title" type="text" class="dfinput" value="{$data.name}" style="width:520px;" required />
+                        <i>请输入中文权限名</i>
+                    </li>
+                    <li>
+                        <label>规则<b>*</b></label>
+                        <input name="name" type="text" class="dfinput" value="{$data.title}" style="width:520px;" required pattern="^[a-zA-Z\/\*\_]+$" />
+                        <i>请输入英文字幕及"/"构成的规则</i>
+                    </li>
+                    <li>
+                        <label>附加规则</label>
+                        <input name="condition" type="text" class="dfinput" value="{$data.condition}" style="width:520px;" />
+                        <i>请输入附加规则</i>
+                    </li>
+                    <li>
+                        <label>状态<b>*</b></label>
+                        <cite>
+                            <input name="status" type="radio" value="1" {eq name="data.type" value="1"}checked{/eq}/>启用
+                            <input name="status" type="radio" value="0" {eq name="data.type" value="0"}checked{/eq}/>禁用
+                        </cite>
+                    </li>
+                    <li>
+                        <label></label>
+                        <cite>
+                            <input class="btn" type="submit" value="提交"/>
+                        </cite>
+                    </li>
+                </ul>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+    $("#usual1 ul").idTabs();
+    $('.tablelist tbody tr:odd').addClass('odd');
+</script>

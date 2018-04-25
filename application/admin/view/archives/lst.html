@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>无标题文档</title>
+    <link href="__STATIC__/admin/css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="__STATIC__/admin/css/select.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="__STATIC__/admin/js/jquery-3.2.1.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/jquery.idTabs.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/select-ui.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/common.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function (e) {
+            $(".select1").uedSelect({
+                width: 345
+            });
+            $(".select2").uedSelect({
+                width: 167
+            });
+            $(".select3").uedSelect({
+                width: 100
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+        <li><a href="{:url('index/main')}">首页</a></li>
+        <li><a href="{:url('archives/lst',['cate_id'=>$cate_id])}">文档列表</a></li>
+    </ul>
+</div>
+<div class="formbody">
+    <form method="post">
+        <input type="hidden" name="cate_id" value="{$cate_id}"/>
+        <div class="tools">
+            <ul class="toolbar">
+                <a href="{:url('Archives/add',['cate_id'=>$cate_id])}">
+                    <li><span><img src="__STATIC__/admin/images/t01.png"></span>添加</li>
+                </a>
+                <a href="javascript:del_select()">
+                    <li><span><img src="__STATIC__/admin/images/delete.png"></span>批量删除</li>
+                </a>
+            </ul>
+        </div>
+        <table class="tablelist">
+            <thead>
+            <tr>
+                <th><input type="checkbox" class="select_all"/>全选</th>
+                <th width="100px;">ID</th>
+                <th>标 题</th>
+                <th>栏 目</th>
+                <th>缩略图</th>
+                <th>属 性</th>
+                <th>操 作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {foreach name="archives" item="val"}
+            <tr>
+                <td><input type="checkbox" class="checkbox" name="del[]" value="{$val.id}"/></td>
+                <td>{$val.id}</td>
+                <td>{$val.title}</td>
+                <td>{$val.cate_name}</td>
+                <td>{notempty name="val.litpic"}<img src="{$val.litpic}" height="20"/>{/notempty}</td>
+                <td>{$val.attribute}</td>
+                <td>
+                    <a href="{:url('Archives/edit',['id'=>$val.id])}">编辑</a>
+                    <a href="javascript:void(0)" onclick="warning('确定要删除吗', '{:url('Archives/delete',['id'=>$val.id])}')">删除</a>
+                </td>
+            </tr>
+            {/foreach}
+            </tbody>
+        </table>
+    </form>
+    <div class="page">
+        {$archives->render();}
+    </div>
+</div>
+<script type="text/javascript">
+    $("#usual1 ul").idTabs();
+    $('.tablelist tbody tr:odd').addClass('odd');
+</script>
+</div>
+</body>
+</html>
+
+<script>
+
+    /*批量删除*/
+    function del_select() {
+        var url = "{:url('Archives/del_select')}";
+        $('form').attr('action', url);
+        $('form').submit();
+    }
+
+    /*全选反选*/
+    $('.select_all').click(function () {
+        if ($(this).is(':checked')) {
+            $('.checkbox').attr('checked', 'true');
+        } else {
+            $('.checkbox').removeAttr('checked');
+        }
+    });
+
+</script>

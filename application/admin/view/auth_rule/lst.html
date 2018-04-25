@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link href="__STATIC__/admin/css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="__STATIC__/admin/css/select.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="__STATIC__/admin/js/jquery-3.2.1.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/jquery.idTabs.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/select-ui.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/common.js"></script>
+    <script src="__STATIC__/admin/plus/layer/layer.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(e) {
+            $(".select1").uedSelect({
+                width : 345
+            });
+            $(".select2").uedSelect({
+                width : 167
+            });
+            $(".select3").uedSelect({
+                width : 100
+            });
+        });
+    </script>
+</head>
+<body>
+
+<div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+        <li><a href="#">首页</a></li>
+        <li><a href="#">权限列表</a></li>
+    </ul>
+</div>
+<form method="post" class="formbody">
+    <div class="tools">
+        <ul class="toolbar">
+            <a href="{:url('AuthRule/add')}"><li><span><img src="__STATIC__/admin/images/t01.png"></span>添加</li></a>
+        </ul>
+    </div>
+    <table class="tablelist">
+        <thead>
+        <tr>
+            <th></th>
+            <th width="100px;">ID</th>
+            <th>权限名称</th>
+            <th>上级栏目</th>
+            <th>权限</th>
+            <th>操 作</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {foreach name="rule" item="val"}
+        <tr id="{$val.id}" pid="{$val.pid}" {neq name="val.pid" value="0"}class="hide"{/neq}>
+        <td><span class="open">+</span></td>
+        <td>{$val.id}</td>
+        <td><?php echo str_repeat("——",$val['level']-1);?>{$val.title}</td>
+        <td>{$val.parent}</td>
+        <td>{$val.title}</td>
+        <td>
+            <a href="{:url('AuthRule/edit',['id'=>$val.id])}">编辑</a>
+            <a href="javascript:void(0)" onclick="del(this,{$val.id})">删除</a>
+        </td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+</form>
+
+<script type="text/javascript">
+    $("#usual1 ul").idTabs();
+    $('.tablelist tbody tr:odd').addClass('odd');
+</script>
+</div>
+</body>
+</html>
+<script>
+    /*删除*/
+    function del(obj,id) {
+        layer.confirm('确认删除？', {
+            btn: ['删除','取消'] //按钮
+        }, function(){
+            $.ajax({
+                type: "GET",
+                url: "{:url('AuthRule/delete')}",
+                data: {id: id},
+                dataType: "json",
+                success: function (data) {
+                    if (data==1) {
+                        $(obj).parents("tr").remove();
+                        layer.msg('删除成功',{icon:1});
+                    }else if(data==-1){
+                        layer.msg('请先删除该规则下的所有子规则',{icon:2});
+                    } else {
+                        layer.msg('删除失败',{icon:2});
+                    }
+                }
+            });
+        }, function(index){
+            layer.close(index);
+        });
+    }
+
+    //列表展开隐藏
+    $('.open').click(function () {
+        var pid = $(this).parents('tr').attr('id');
+        if($(this).text()=='+'){
+            $(this).text('-');
+            $(this).css('padding','0 6px');
+            $("tr[pid="+pid+"]").show();
+        }else{
+            $(this).text('+');
+            $(this).css('padding','0 4px');
+            //$("tr[pid="+pid+"]").hide();
+            hide_son_cate(pid);
+        }
+    });
+
+    //收缩多级栏目
+    function hide_son_cate(pid) {
+        $('tr[pid='+pid+']').each(function () {
+            $(this).find('.open').text('+');
+            $(this).find('.open').css('padding','0 4px');
+            $(this).hide();
+            var spid=$(this).attr('id');
+            hide_son_cate(spid);
+        })
+    }
+
+</script>

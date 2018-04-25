@@ -1,0 +1,28 @@
+<html>
+<body>
+<a href="javascript:;" onclick="get_data();">click</a>
+</body>
+
+</html>
+<script type="text/javascript" src="jquery-1.7.2.min.js"></script>
+<script>
+    /*删除*/
+    function get_data() {
+        $.ajax({
+            type: "GET",
+            url: "http://www.turbo.com/home/Index/special",
+            //data: {id: id},
+            dataType: "jsonp",
+            success: function (data) {
+                console.log(data);
+                /*if (data == 1) {
+                    $(obj).parents("tr").remove();
+                    layer.msg('删除成功',{icon:1});
+                } else {
+                    layer.msg('删除失败',{icon:2});
+                }*/
+            }
+        });
+
+    }
+</script>

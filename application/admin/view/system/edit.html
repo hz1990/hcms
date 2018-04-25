@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>无标题文档</title>
+    <link href="__STATIC__/admin/css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="__STATIC__/admin/css/select.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="__STATIC__/admin/js/jquery-3.2.1.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/jquery.idTabs.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/select-ui.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/editor/kindeditor.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(e) {
+            $(".select").uedSelect({
+                width : 345
+            })
+        });
+    </script>
+</head>
+
+<body>
+
+<div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+        <li><a href="#">首页</a></li>
+        <li><a href="#">修改配置</a></li>
+    </ul>
+</div>
+
+<div class="formbody">
+
+    <div class="formtitle"><span>修改配置</span></div>
+    <form action="{:url('System/edit')}" method="post">
+        <input name="id" value="{$data.id}" type="hidden"/>
+        <ul class="forminfo">
+            <li>
+                <label>中文名称</label>
+                <input name="cname" value="{$data.cname}" type="text" class="dfinput"/><i>名称不能超过30个字符</i>
+            </li>
+            <li>
+                <label>英文名称</label>
+                <input name="ename" value="{$data.ename}" type="text" class="dfinput"/><i>名称不能超过30个字符</i>
+            </li>
+            <li>
+                <label>值（value）</label>
+                <textarea class="textinput" name="value" rows="" cols="">{$data.value}</textarea>
+            </li>
+            <li>
+                <label>可选值</label>
+                <input name="values" type="text" value="{$data.values}" class="dfinput"/>
+            </li>
+            <li><label>数据类型<b>*</b></label>
+                <div class="vocation">
+                    <select class="select" name="data_type">
+                        <option></option>
+                        <option value="1" {eq name="data.data_type" value="1"}selected{/eq}>输入框</option>
+                        <option value="2" {eq name="data.data_type" value="2"}selected{/eq}>单选</option>
+                        <option value="3" {eq name="data.data_type" value="3"}selected{/eq}>复选</option>
+                        <option value="4" {eq name="data.data_type" value="4"}selected{/eq}>下拉菜单</option>
+                        <option value="5" {eq name="data.data_type" value="5"}selected{/eq}>文本域</option>
+                        <option value="6" {eq name="data.data_type" value="6"}selected{/eq}>附件</option>
+                    </select>
+                </div>
+                <i>请选择数据类型</i>
+            </li>
+            <li><label>配置类型<b>*</b></label>
+                <div class="vocation">
+                    <select class="select" name="config_type">
+                        <option></option>
+                        <option value="1" {eq name="data.config_type" value="1"}selected{/eq}>基本信息</option>
+                        <option value="2" {eq name="data.config_type" value="2"}selected{/eq}>联系方式</option>
+                        <option value="3" {eq name="data.config_type" value="3"}selected{/eq}>seo设置</option>
+                    </select>
+                </div>
+                <i>请选择配置类型</i>
+            </li>
+            <li>
+                <label>提示信息（tip）</label>
+                <input name="tip" type="text" class="dfinput" value="{$data.tip}"/>
+            </li>
+            <li>
+                <label>&nbsp;</label>
+                <input name="" type="submit" class="btn" value="确认保存"/>
+            </li>
+        </ul>
+    </form>
+
+</div>
+</body>
+</html>

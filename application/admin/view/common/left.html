@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>无标题文档</title>
+    <link href="__STATIC__/admin/css/style.css" rel="stylesheet" type="text/css"/>
+    <script language="JavaScript" src="__STATIC__/admin/js/jquery-3.2.1.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            //导航切换
+            $(".menuson li").click(function () {
+                $(".menuson li.active").removeClass("active")
+                $(this).addClass("active");
+            });
+
+            $('.title').click(function () {
+                var $ul = $(this).next('ul');
+                $('dd').find('ul').slideUp();
+                if ($ul.is(':visible')) {
+                    $(this).next('ul').slideUp();
+                } else {
+                    $(this).next('ul').slideDown();
+                }
+            });
+        })
+    </script>
+</head>
+
+<body style="background:#f0f9fd;">
+<div class="lefttop"><span></span>通讯录</div>
+
+<dl class="leftmenu">
+
+    {volist name="menu" id="vo"}
+    {in name="vo.url" value="$authRule"}
+    <dd>
+        <div class="title">
+            <span><img src="{$vo.ico}"/></span>{$vo.word}
+        </div>
+        <ul class="menuson">
+            {foreach name="vo.list" item="val"}
+            {in name="val.url" value="$authRule"}
+            <li><cite></cite><a href="{:url($val.url)}" target="rightFrame">{$val.words}</a><i></i></li>
+            {/in}
+            {/foreach}
+        </ul>
+    </dd>
+    {/in}
+    {/volist}
+
+    <!--<dd>
+        <div class="title">
+            <span><img src="__STATIC__/admin/images/leftico01.png"/></span>welcome
+        </div>
+        <ul class="menuson">
+            <li class="active"><cite></cite><a href="{:url('admin/Index/main')}" target="rightFrame">welcome</a><i></i></li>
+        </ul>
+    </dd>
+
+    <dd>
+        <div class="title">
+            <span><img src="__STATIC__/admin/images/leftico04.png"/></span>系统设置
+        </div>
+        <ul class="menuson">
+            <li><cite></cite><a href="{:url('admin/System/lst')}" target="rightFrame">配置列表</a><i></i></li>
+            <li><cite></cite><a href="{:url('admin/System/index')}" target="rightFrame">配置管理</a><i></i></li>
+        </ul>
+    </dd>
+
+    <dd>
+        <div class="title">
+            <span><img src="__STATIC__/admin/images/leftico04.png"/></span>模型管理
+        </div>
+        <ul class="menuson">
+            <li><cite></cite><a href="{:url('admin/Model/lst')}" target="rightFrame">模型列表</a><i></i></li>
+        </ul>
+    </dd>
+
+    <dd>
+        <div class="title">
+            <span><img src="__STATIC__/admin/images/leftico04.png"/></span>栏目管理
+        </div>
+        <ul class="menuson">
+            <li><cite></cite><a href="{:url('admin/Category/lst')}" target="rightFrame">栏目列表</a><i></i></li>
+        </ul>
+    </dd>
+
+    <dd>
+        <div class="title">
+            <span><img src="__STATIC__/admin/images/leftico04.png"/></span>采集管理
+        </div>
+        <ul class="menuson">
+            <li><cite></cite><a href="{:url('admin/Collection/lst')}" target="rightFrame">采集列表</a><i></i></li>
+            <li><cite></cite><a href="{:url('admin/Collection/collection_data_list')}" target="rightFrame">采集的数据</a><i></i></li>
+        </ul>
+    </dd>
+
+    <dd>
+        <div class="title">
+            <span><img src="__STATIC__/admin/images/leftico04.png"/></span>广告管理
+        </div>
+        <ul class="menuson">
+            <li><cite></cite><a href="{:url('admin/AdPosition/lst')}" target="rightFrame">广告位列表</a><i></i></li>
+            <li><cite></cite><a href="{:url('admin/Advert/lst')}" target="rightFrame">广告列表</a><i></i></li>
+        </ul>
+    </dd>
+
+    <dd>
+        <div class="title">
+            <span><img src="__STATIC__/admin/images/leftico04.png"/></span>后台用户
+        </div>
+        <ul class="menuson">
+            <li><cite></cite><a href="{:url('admin/Admin/lst')}" target="rightFrame">管理员列表</a><i></i></li>
+        </ul>
+    </dd>
+
+    <dd>
+        <div class="title">
+            <span><img src="__STATIC__/admin/images/leftico04.png"/></span>权限配置
+        </div>
+        <ul class="menuson">
+            <li><cite></cite><a href="{:url('admin/AuthRule/lst')}" target="rightFrame">规则列表</a><i></i></li>
+            <li><cite></cite><a href="{:url('admin/AuthGroup/lst')}" target="rightFrame">分组列表</a><i></i></li>
+        </ul>
+    </dd>-->
+</dl>
+</body>
+</html>

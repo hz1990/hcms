@@ -1,0 +1,265 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>无标题文档</title>
+    <link href="__STATIC__/admin/css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="__STATIC__/admin/css/select.css" rel="stylesheet" type="text/css"/>
+    <link href="__STATIC__/admin/plus/uploadify/uploadify.css" rel="stylesheet" type="text/css"/>
+
+    <script type="text/javascript" src="__STATIC__/admin/js/jquery-3.2.1.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/jquery.idTabs.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/select-ui.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/ueditor/ueditor.all.js"></script>
+    <script type="text/javascript" charset="utf-8" src="__STATIC__/admin/ueditor/lang/zh-cn/zh-cn.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/plus/uploadify/jquery.uploadify.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function (e) {
+            $(".select").uedSelect({
+                width: 700
+            });
+        });
+        $(function(){
+            $("#uploadify").uploadify({
+                swf:'__STATIC__/admin/plus/uploadify/uploadify.swf',  //引入uploadify.swf
+                uploader:"{:url('Archives/upimg')}",//请求路径
+                fileTypeDesc:'Image Files',    //可选择文件类型说明
+                buttonText:'图片上传',//按钮上的文字
+                buttonClass:'btn',//按钮样式
+                progressData:'speed',
+                fileObjName:'img',
+                onUploadSuccess:function (file,data,res) {
+                    if($('#litpic')){
+                        $('#litpic').remove();
+                        $('#uploadify').after("<span id='litpic'><img src='"+data+"' height='100'/></span><a class='delimg' href='javascript:;' onclick='delimg();'>撤销</a>");
+                        $('#img').val(data);
+                    }else{
+                        $('#uploadify').after("<span id='litpic'><img src='"+data+"' height='100'/></span><a class='delimg' href='javascript:;' onclick='delimg();'>撤销</a>");
+                        $('#img').val(data);
+                    }
+                    $('#uploadify-queue').remove();
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+
+<div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+        <li><a href="{:url('index/main')}">首页</a></li>
+        <li><a href="{:url('archives/lst',['cate_id'=>$cate.id])}">文档列表</a></li>
+    </ul>
+</div>
+
+<div class="formbody">
+    <div id="usual1" class="usual">
+        <div class="itab">
+            <ul>
+                <li><a href="#tab1" class="selected">基本参数</a></li>
+                <li><a href="#tab2">模型数据</a></li>
+            </ul>
+        </div>
+        <form action="" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="id" value="{$data.id}"/>
+            <input type="hidden" name="cate_id" value="{$cate.id}"/>
+            <input type="hidden" name="model_id" value="{$cate.model_id}"/>
+            <!--TAB1-->
+            <div id="tab1" class="tabson">
+                <ul class="forminfo">
+                    <li>
+                        <label>标  题<b>*</b></label>
+                        <div class="vocation">
+                            <input name="title" type="text" class="dfinput" value="{$data.title}" style="width:700px;"/>
+                        </div>
+                    </li>
+                    <li>
+                        <label>属  性</label>
+                        <cite>
+                            <input name="attribute[]" type="checkbox" value="h" <?php if(in_array('h',explode(',',$data['attribute']))){echo "checked";}?>/>头条[h]
+                            <input name="attribute[]" type="checkbox" value="c" <?php if(in_array('c',explode(',',$data['attribute']))){echo "checked";}?>/>推荐[c]
+                            <input name="attribute[]" type="checkbox" value="p" <?php if(in_array('p',explode(',',$data['attribute']))){echo "checked";}?>/>图文[p]
+                            <input name="attribute[]" type="checkbox" value="f" <?php if(in_array('f',explode(',',$data['attribute']))){echo "checked";}?>/>幻灯[f]
+                            <input name="attribute[]" type="checkbox" value="b" <?php if(in_array('b',explode(',',$data['attribute']))){echo "checked";}?>/>加粗[b]
+                            <input name="attribute[]" type="checkbox" value="j" <?php if(in_array('j',explode(',',$data['attribute']))){echo "checked";}?>/>跳转[j]
+                        </cite>
+                    </li>
+                    <li>
+                        <label>缩略图<b></b></label>
+                        <cite>
+                            <div id="uploadify"></div>
+                            <span id='litpic'>
+                                <img src='{$data.litpic}' height='100'/>
+                            </span>
+                            <a class='delimg' href='javascript:;' onclick='delimg();'>撤销</a>
+                            <input type="hidden" id="img" name="litpic" value="{$data.litpic}"/>
+                        </cite>
+                    </li>
+                    <li>
+                        <label>关键词</label>
+                        <cite>
+                            <input name="keywords" value="{$data.keywords}" type="text" class="dfinput" style="width:700px;"/>
+                        </cite>
+                    </li>
+                    <li>
+                        <label>描  述</label>
+                        <cite>
+                            <textarea rows="" name="description" class="textinput" cols="" style="width:680px;">{$data.description}</textarea>
+                        </cite>
+                    </li>
+                    <li>
+                        <label>作  者</label>
+                        <cite>
+                            <input name="writer" value="{$data.writer}" type="text" class="dfinput" style="width:700px;"/>
+                        </cite>
+                    </li>
+                    <li>
+                        <label>来  源</label>
+                        <cite>
+                            <input name="source" value="{$data.source}" type="text" class="dfinput" style="width:700px;"/>
+                        </cite>
+                    </li>
+                    <li>
+                        <label>点击量</label>
+                        <cite>
+                            <input name="click" value="{$data.click}" type="text" class="dfinput" style="width:700px;"/>
+                        </cite>
+                    </li>
+                    <li>
+                        <label></label>
+                        <cite>
+                            <input class="btn" type="submit" value="提交"/>
+                        </cite>
+                    </li>
+                </ul>
+            </div>
+
+            <!--TAB2-->
+            <div id="tab2" class="tabson">
+                <ul class="forminfo">
+                    {volist name="model_fields" key="key" id="vo"}
+                    <li>
+                        <label>{$vo.field_cname}<b></b></label>
+                        {switch name="vo.field_type" }
+                        {case value="1" break="1"}
+                        <input name="{$vo.field_ename}" type="text" class="dfinput" value="{$data[$vo.field_ename]}" style="width:700px;"/>
+                        {/case}
+                        {case value="2" break="1"}
+                        <cite>
+                            {foreach name="vo.field_value" item ="val"}
+                            <input name="{$vo.field_ename}" type="radio" value="{$val}" <?php if(in_array($val,explode(',',$data[$vo['field_ename']]))) {echo "checked";}?>/>{$val}
+                            {/foreach}
+                        </cite>
+                        {/case}
+                        {case value="3" break="1"}
+                        <cite>
+                            {foreach name="vo.field_value" item ="val"}
+                            <input name="{$vo.field_ename}[]" type="checkbox" value="{$val}" <?php if(in_array($val,explode(',',$data[$vo['field_ename']]))) {echo "checked";}?>/>{$val}
+                            {/foreach}
+                        </cite>
+                        {/case}
+                        {case value="4" break="1"}
+                        <div class="vocation">
+                            <select name="{$vo.field_ename}" class="select" style="width: 520px;">
+                                {foreach name="vo.field_value" item ="val"}
+                                <option value="{$val}" <?php if(in_array($val,explode(',',$data[$vo['field_ename']]))) {echo "selected";}?>>{$val}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                        {/case}
+                        {case value="5" break="1"}
+                        <textarea rows="" name="description" class="textinput" style="width:680px;">{$data[$vo.field_ename]}</textarea>
+                        {/case}
+                        {case value="6" break="1"}
+                        <cite>
+                            <input type="file" name="{$vo.field_ename}" value="" />
+                            {notempty name="data[$vo.field_ename]"}<br>
+                            <span><img src="{$data[$vo.field_ename]}" height="100"/></span>
+                            <a href="javascript:void (0);" onclick="javascript:del_img(this)" class="delimg">删除图片</a>
+                            <i>如无需修改此附件，则不需上传</i>
+                            {/notempty}
+                        </cite>
+                        {/case}
+                        {case value="7" break="1"}
+                        <input name="{$vo.field_ename}" type="text" class="dfinput" value="{$data[$vo.field_ename]}" style="width:700px;"/>
+                        {/case}
+                        {case value="8" break="1"}
+                        <input name="{$vo.field_ename}" type="text" class="dfinput" value="{$data[$vo.field_ename]}" style="width:700px;"/>
+                        {/case}
+                        {case value="9" break="1"}
+                        <cite>
+                            <textarea id="editor{$vo.id}" name="{$vo.field_ename}" type="editor" style="width:700px; height: 500px;">{$data[$vo.field_ename]}</textarea>
+                        </cite>
+                        {/case}
+                        {default /}<input name="{$vo.field_ename}" type="text" class="dfinput" value="{$data[$vo.field_ename]}" style="width:700px;"/>
+                        {/switch}
+                    </li>
+                    {/volist}
+                    <li>
+                        <label></label>
+                        <cite>
+                            <input class="btn" type="submit" value="提交"/>
+                        </cite>
+                    </li>
+                </ul>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
+<script type="text/javascript">
+    var ue = UE.getEditor('editor');
+    $("#usual1 ul").idTabs();
+    $('.tablelist tbody tr:odd').addClass('odd');
+
+    $(function(){
+        $("textarea").each(function () {
+            if($(this).attr('type') =="editor"){
+                UE.getEditor($(this).attr('id'));
+            }
+        });
+
+    })
+
+    function delimg() {
+        var path = $('#img').val();
+        $.ajax({
+            type: "GET",
+            url: "{:url('archives/delimg')}",
+            data: {path: path},
+            dataType: "json",
+            success: function (data) {
+                if(data == 1){
+                    $('#img').val('');
+                    $('#litpic').remove();
+                    $('.delimg').remove();
+                }
+            }
+        })
+    }
+
+    function del_img(obj) {
+        var path = $(obj).parent('cite').find('img').attr('src');
+        var name = $(obj).parent('cite').find('input').attr('name');
+        $.ajax({
+            type: "GET",
+            url: "{:url('archives/delimg')}",
+            data: {path: path},
+            dataType: "json",
+            success: function (data) {
+                if(data == 1){
+                    $(obj).after("<input type='hidden' name='"+name+"' value=''/>");
+                    $(obj).parent('cite').find('img').remove();
+                    $(obj).parent('cite').find('i').remove();
+                    $(obj).remove();
+                }
+            }
+        })
+    }
+</script>

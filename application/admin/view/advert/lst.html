@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>无标题文档</title>
+    <link href="__STATIC__/admin/css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="__STATIC__/admin/css/select.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="__STATIC__/admin/js/jquery-3.2.1.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/jquery.idTabs.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/select-ui.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/common.js"></script>
+    <script src="__STATIC__/admin/plus/layer/layer.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function (e) {
+            $(".select1").uedSelect({
+                width: 345
+            });
+            $(".select2").uedSelect({
+                width: 167
+            });
+            $(".select3").uedSelect({
+                width: 100
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+        <li><a href="{:url('index/main')}">首页</a></li>
+        <li><a href="{:url('Advert/lst')}">广告列表</a></li>
+    </ul>
+</div>
+<div class="formbody">
+    <form method="post">
+        <div class="tools">
+            <ul class="toolbar">
+                <a href="{:url('Advert/add')}">
+                    <li><span><img src="__STATIC__/admin/images/t01.png"></span>添加广告</li>
+                </a>
+            </ul>
+        </div>
+        <table class="tablelist">
+            <thead>
+            <tr>
+                <th width="100px;">ID</th>
+                <th>广告标题</th>
+                <th>广告类型</th>
+                <th>开启状态</th>
+                <th>广告位置</th>
+                <th>操 作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {foreach name="advert" item="val"}
+            <tr class="{$val.position_id}">
+                <td>{$val.id}</td>
+                <td>{$val.title}</td>
+                <td>{eq name="val.type" value="1"}图片广告{/eq}{eq name="val.type" value="2"}轮播广告{/eq}</td>
+                <td>{eq name="val.status" value="0"}<a class="a_hide" href="javascript:;" onclick="javascript:change_status(this,{$val.id},{$val.position_id})">关闭</a>{/eq}{eq name="val.status" value="1"}<a class="a_show"  href="javascript:;" onclick="javascript:change_status(this,{$val.id},{$val.position_id})">开启</a>{/eq}</td>
+                <td>{$val.name}</td>
+                <td>
+                    <a href="{:url('Advert/edit',['id'=>$val.id])}">编辑</a>
+                    <a href="javascript:void(0)" onclick="del(this,{$val.id})">删除</a>
+                </td>
+            </tr>
+            {/foreach}
+            </tbody>
+        </table>
+    </form>
+    <div class="page">
+        {$advert->render();}
+    </div>
+</div>
+<script type="text/javascript">
+    $("#usual1 ul").idTabs();
+    $('.tablelist tbody tr:odd').addClass('odd');
+</script>
+</div>
+</body>
+</html>
+<script>
+    /*删除*/
+    function del(obj,id) {
+        layer.confirm('确认删除？', {
+            btn: ['删除','取消'] //按钮
+        }, function(){
+            $.ajax({
+                type: "GET",
+                url: "{:url('Advert/delete')}",
+                data: {id: id},
+                dataType: "json",
+                success: function (data) {
+                    if (data == 1) {
+                        $(obj).parents("tr").remove();
+                        layer.msg('删除成功',{icon:1});
+                    } else {
+                        layer.msg('删除失败',{icon:2});
+                    }
+                }
+            });
+        }, function(index){
+            layer.close(index);
+        });
+    }
+    function change_status(obj,id,pid) {
+        $.ajax({
+            type: "GET",
+            url: "{:url('Advert/change_status')}",
+            data: {id: id},
+            dataType: "json",
+            success: function (data) {
+                if (data == 1) {
+                    $('.'+pid).each(function () {
+                        $(this).find('td').eq(3).find('a').text('关闭');
+                        $(this).find('td').eq(3).find('a').attr('class','a_hide');
+                    });
+                    $(obj).html('开启');
+                    $(obj).attr('class','a_show');
+                } else {
+                    $(obj).html('关闭');
+                    $(obj).attr('class','a_hide');
+                }
+            }
+        });
+    }
+</script>

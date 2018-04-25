@@ -1,0 +1,235 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>无标题文档</title>
+    <link href="__STATIC__/admin/css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="__STATIC__/admin/css/select.css" rel="stylesheet" type="text/css"/>
+    <link href="__STATIC__/admin/plus/uploadify/uploadify.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="__STATIC__/admin/js/jquery-3.2.1.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/jquery.idTabs.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/select-ui.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/ueditor/ueditor.all.js"></script>
+    <script type="text/javascript" charset="utf-8" src="__STATIC__/admin/ueditor/lang/zh-cn/zh-cn.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/plus/uploadify/jquery.uploadify.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function (e) {
+            $(".select").uedSelect({
+                width: 520
+            });
+        });
+        $(function(){
+            $("#uploadify").uploadify({
+                swf:'__STATIC__/admin/plus/uploadify/uploadify.swf',  //引入uploadify.swf
+                uploader:"{:url('category/upimg')}",//请求路径
+                fileTypeDesc:'Image Files',    //可选择文件类型说明
+                buttonText:'图片上传',//按钮上的文字
+                buttonClass:'btn',//按钮样式
+                progressData:'speed',
+                fileObjName:'img',
+                onUploadSuccess:function (file,data,res) {
+                    if($('#litpic')){
+                        $('#litpic').remove();
+                        $('#uploadify').after("<span id='litpic'><img src='"+data+"' height='100'/></span>");
+                        $('#img').val(data);
+                    }else{
+                        $('#uploadify').after("<span id='litpic'><img src='"+data+"' height='100'/></span>");
+                        $('#img').val(data);
+                    }
+                    $('#uploadify-queue').remove();
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+        <li><a href="#">首页</a></li>
+        <li><a href="#">系统设置</a></li>
+    </ul>
+</div>
+<div class="formbody">
+    <div id="usual1" class="usual">
+        <div class="itab">
+            <ul>
+                <li><a href="#tab1" class="selected">基本参数</a></li>
+                <li><a href="#tab2">SEO配置</a></li>
+                <li><a href="#tab3">高级参数</a></li>
+            </ul>
+        </div>
+        <form action="" method="post" enctype="multipart/form-data">
+        <!--TAB1-->
+        <div id="tab1" class="tabson">
+            <ul class="forminfo">
+                <li>
+                    <label>选择模型<b>*</b></label>
+                    <div class="vocation">
+                        <select name="model_id" class="select">
+                            <option value="">请 选 择</option>
+                            {foreach name="model" item="val"}
+                            <option value="{$val.id}" {present name="parent"}{eq name="parent.model_id" value="$val.id"}selected{/eq}{/present}>{$val.model_name}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                </li>
+                <li>
+                    <label>上级栏目<b>*</b></label>
+                    <div class="vocation">
+                        <select name="parent_id" class="select">
+                            <option value="">请 选 择</option>
+                            <option value="0">顶级栏目</option>
+                            {foreach name="cate" item="val"}
+                            <option value="{$val.id}" {present name="parent"}{eq name="parent.id" value="$val.id"}selected{/eq}{/present}><?php echo str_repeat("——",$val['level']-1);?>{$val.cate_name}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                </li>
+                <li>
+                    <label>栏目名称<b>*</b></label>
+                    <div class="vocation">
+                        <input name="cate_name" type="text" class="dfinput" value="" style="width:520px;"/>
+                    </div>
+                </li>
+                <li>
+                    <label>栏目状态<b>*</b></label>
+                    <cite>
+                        <input name="status" type="radio" value="1" checked/>显示
+                        <input name="status" type="radio" value="0" />隐藏
+                    </cite>
+                </li>
+                <li>
+                    <label>底部导航<b>*</b></label>
+                    <cite>
+                        <input name="showInBottom" type="radio" value="1" />是
+                        <input name="showInBottom" type="radio" value="0" checked/>否
+                    </cite>
+                </li>
+                <li>
+                    <label>缩 略 图<b></b></label>
+                    <cite>
+                        <div id="uploadify"></div>
+                        <input type="hidden" id="img" name="img" value=""/>
+                    </cite>
+                </li>
+                <li>
+                    <label>栏目类型<b>*</b></label>
+                    <cite>
+                        <input name="type" type="radio" value="1" checked/>列表栏目
+                        <input name="type" type="radio" value="2"/>频道封面
+                        <input name="type" type="radio" value="3" id="url"/>外部链接
+                    </cite>
+                </li>
+
+                <li id="link" style="display: none;">
+                    <label>链接地址<b>*</b></label>
+                    <cite>
+                        <input name="link" type="text" class="dfinput" value="" placeholder="带http://链接" style="width:520px;"/>
+                        <span>外部链接栏目地址</span>
+                    </cite>
+                </li>
+
+                <li>
+                    <label>封面模板<b>*</b></label>
+                    <cite>
+                        <input name="index_template" type="text" class="dfinput" {present name="parent"}value="{$parent.index_template}"{/present} style="width:520px;"/>
+                    </cite>
+                </li>
+                <li>
+                    <label>列表模板<b>*</b></label>
+                    <cite>
+                        <input name="list_template" type="text" class="dfinput" {present name="parent"}value="{$parent.list_template}"{/present} style="width:520px;"/>
+                    </cite>
+                </li>
+                <li>
+                    <label>内容模板<b>*</b></label>
+                    <cite>
+                        <input name="content_template" type="text" class="dfinput" {present name="parent"}value="{$parent.content_template}"{/present} style="width:520px;"/>
+                    </cite>
+                </li>
+                <li>
+                    <label>跳 转 到：<b>*</b></label>
+                    <div class="vocation">
+                        <select name="jump" class="select">
+                            <option value="0">不跳转</option>
+                            {foreach name="cate" item="val"}
+                            <option value="{$val.id}" {present name="parent"}{eq name="parent.id" value="$val.id"}selected{/eq}{/present}><?php echo str_repeat("——",$val['level']-1);?>{$val.cate_name}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                </li>
+                <li>
+                    <label></label>
+                    <cite>
+                        <input class="btn" type="submit" value="提交"/>
+                    </cite>
+                </li>
+            </ul>
+        </div>
+        <!--TAB2-->
+        <div id="tab2" class="tabson">
+            <ul class="forminfo">
+                <li>
+                    <label>栏目标题<b></b></label>
+                    <cite>
+                        <input name="title" type="text" class="dfinput" value="" style="width:520px;"/>
+                    </cite>
+                </li>
+                <li>
+                    <label>栏目描述<b></b></label>
+                    <cite>
+                        <textarea rows="" name="description" class="textinput" cols=""></textarea>
+                    </cite>
+                </li>
+                <li>
+                    <label>关 键 词<b></b></label>
+                    <cite>
+                        <input name="keywords" type="text" class="dfinput" value="" style="width:520px;"/>
+                    </cite>
+                </li>
+                <li>
+                    <label></label>
+                    <cite>
+                        <input class="btn" type="submit" value="提交"/>
+                    </cite>
+                </li>
+            </ul>
+        </div>
+        <!--TAB3-->
+        <div id="tab3" class="tabson">
+            <ul class="forminfo">
+                <li>
+                    <label>栏目内容<b></b></label>
+                    <cite>
+                        <textarea id="editor" name="content" style="width:700px;height:500px;"></textarea>
+                    </cite>
+                </li>
+                <li>
+                    <label></label>
+                    <cite>
+                        <input class="btn" type="submit" value="提交"/>
+                    </cite>
+                </li>
+            </ul>
+        </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+    var ue = UE.getEditor('editor');
+    $("#usual1 ul").idTabs();
+    $('.tablelist tbody tr:odd').addClass('odd');
+    //栏目类型效果
+    $("input[name='type']").click(function () {
+        if ($("input[name='type']:checked").val()==3) {
+            $('#link').show();
+        } else {
+            $('#link').hide();
+            $('#link').val('');
+        }
+    });
+</script>
